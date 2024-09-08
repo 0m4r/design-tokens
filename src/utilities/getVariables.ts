@@ -68,9 +68,7 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
   // get variables
   const variables = figma.variables
     .getLocalVariables()
-    .filter((variable) =>
-      excludedCollectionIds.includes(variable.variableCollectionId)
-    )
+    .filter((variable) => (settings.exportHideFromPublish || !variable.hiddenFromPublishing) && excludedCollectionIds.includes(variable.variableCollectionId))
     .map((variable) => {
       // get collection name and modes
       const { variableCollectionId } = variable
@@ -92,7 +90,7 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
                 modes.find(({ modeId }) => modeId === id).name
               }/${variable.name}`
             : `${collection}/${variable.name}`,
-          // add mnetadata to extensions
+          // add metadata to extensions
           extensions: {
             [config.key.extensionPluginData]: {
               mode: settings.modeReference
