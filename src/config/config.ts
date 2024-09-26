@@ -28,8 +28,7 @@ export default {
       gitlabCommit: 'gitlab_commit',
       basic: 'Basic',
       bearer: 'Bearer'
-    },
-    exportHideFromPublish: false
+    }
   },
   exclusionPrefixDefault: ['_', '.'],
   fileExtensions: [

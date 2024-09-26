@@ -225,40 +225,39 @@ export const GeneralSettings = () => {
       <Separator />
       <div>
           <Title size="small" weight="bold">
-            Reference mode in variables
+            Reference mode from variables
           </Title>
         <div className="grid-2-col">
           <div>
             <Checkbox
-              label="Enable/disable mode referencing"
-              type="switch"
-              checked={settings.modeReference}
-              onChange={(value) =>
-                updateSettings((draft) => {
-                  draft.modeReference = value;
-                })
-              }
-              info={{
-                  width: 240,
-                label:"If disabled, the exported json will not include the mode of variables, nor in the token name, nor in the token value"
-              }}
-            />
-          </div>
-          <div>
-            <Checkbox
-              label="Add mode to token name only"
+              label="Add mode to design token name"
               type="switch"
               checked={settings.modeInTokenName}
-              isDisabled={!settings.modeReference}
               onChange={(value) =>
                 updateSettings((draft) => {
                   draft.modeInTokenName = value;
                 })
               }
               info={{
+                width: 240,
+                label:"If enabled, the exported json will include the mode of the variables in the token name"
+              }}
+            />
+          </div>
+          <div>
+            <Checkbox
+              label="Add mode to design token value"
+              type="switch"
+              checked={settings.modeInTokenValue}
+              onChange={(value) =>
+                updateSettings((draft) => {
+                  draft.modeInTokenValue = value;
+                })
+              }
+              info={{
                 width: 220,
                 position: "left",
-                label:"If enabled, the exported json will include the mode of variables in the token name but not in the value."
+                label:"If enabled, the exported json will include the mode of the variables in the token value"
               }}
             />
           </div>
@@ -287,28 +286,6 @@ export const GeneralSettings = () => {
         <Info
           width={240}
           label='When disabled the prefix is removed ("radius/small" → "small"), when enabled it is added ("radius/small" → "radius/small").'
-        />
-      </Row>
-      <Separator />
-      <Title size="small" weight="bold">
-        Hide from publish{" "}
-        <Info width={150} label='Export "Hide from publish" variables' />
-      </Title>
-      <Text className={textStyle} size="small">
-        If you edit one or more variables to set them to "Hide from Publish", they are not exported.
-        By turning this option on, they will be instead included in the export.
-      </Text>
-      <Row>
-        <Checkbox
-          label='Export "Hide from publish" variables'
-          type="switch"
-          checked={settings.exportHideFromPublish}
-          onChange={(value) =>
-            updateSettings((draft) => {
-              console.log(value, draft)
-              draft.exportHideFromPublish = value;
-            })
-          }
         />
       </Row>
       <Separator />

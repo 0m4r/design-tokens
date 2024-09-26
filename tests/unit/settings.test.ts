@@ -36,9 +36,8 @@ const baseSettings: Settings = {
   alias: "alias, ref, reference",
   keyInName: false,
   prefixInName: true,
-  modeReference: true,
+  modeInTokenValue: true,
   modeInTokenName: true,
-  exportHideFromPublish: false,
   prefix: {
     color: "color",
     gradient: "gradient",

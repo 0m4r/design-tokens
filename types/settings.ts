@@ -3,27 +3,26 @@ export type nameConversionType = "default" | "camelCase" | "kebabCase";
 export type tokenFormatType = "standard" | "original";
 
 export type Settings = {
-  filename: string;
-  extension: string;
-  nameConversion: nameConversionType;
-  tokenFormat: tokenFormatType;
-  compression: boolean;
-  urlJsonCompression: boolean;
-  serverUrl?: string;
-  eventType: string;
-  accessToken?: string;
-  acceptHeader?: string;
-  contentType?: string;
-  exclusionPrefix: string;
-  excludeExtensionProp: boolean;
-  alias: string;
-  authType: string;
-  reference: string;
-  keyInName: boolean;
-  prefixInName: boolean;
-  modeReference: boolean;
-  modeInTokenName: boolean;
-  exportHideFromPublish: false;
+  filename: string,
+  extension: string,
+  nameConversion: nameConversionType,
+  tokenFormat: tokenFormatType,
+  compression: boolean,
+  urlJsonCompression: boolean,
+  serverUrl?: string,
+  eventType: string,
+  accessToken?: string,
+  acceptHeader?: string,
+  contentType?: string,
+  exclusionPrefix: string,
+  excludeExtensionProp: boolean,
+  alias: string,
+  authType: string,
+  reference: string,
+  keyInName: boolean,
+  prefixInName: boolean,
+  modeInTokenValue: boolean,
+  modeInTokenName: boolean,
   prefix: {
     color: string;
     gradient: string;
