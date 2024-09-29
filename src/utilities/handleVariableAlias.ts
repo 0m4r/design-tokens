@@ -4,7 +4,7 @@ import { tokenTypes } from "@config/tokenTypes";
 import { getVariableTypeByValue } from "@src/utilities/getVariableTypeByValue";
 import { changeNotation } from "@src/utilities/changeNotation";
 
-function handleVariableAlias(variable, value, mode) {
+function handleVariableAlias(variable, value, mode, aliasSameMode = false) {
   const resolvedAlias = figma.variables.getVariableById(value.id);
   const collection = figma.variables.getVariableCollectionById(
     resolvedAlias.variableCollectionId
@@ -25,7 +25,7 @@ function handleVariableAlias(variable, value, mode) {
     // modes when using aliases
     aliasCollectionName: collection.name.toLowerCase(),
     aliasMode: mode,
-    aliasSameMode: variable.aliasSameMode,
+    aliasSameMode: variable.aliasSameMode || aliasSameMode,
   };
 }
 

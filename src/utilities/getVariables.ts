@@ -53,45 +53,6 @@ const extractVariable = (
   };
 };
 
-// Function to detect if a variable references another variable in the same mode
-// const detectVariableReferences = () => {
-//   const variableCollections = figma.variables.getLocalVariableCollections();
-
-//   // Iterate over each variable collection
-//   variableCollections.forEach((collection) => {
-//     // Iterate over each mode in the collection
-//     collection.modes.forEach((mode) => {
-//       console.log(`Inspecting variables in mode: ${mode.name}, ${mode.modeId}`);
-
-//       // Iterate over each variable in the collection
-//       collection.variableIds.forEach((variableId) => {
-//         const variable = figma.variables.getVariableById(variableId);
-
-//         if (variable) {
-//           const modeValue = variable.valuesByMode[mode.modeId];
-
-//           // Loop through other variables in the same collection to check for references
-//           collection.variableIds.forEach((otherVariableId) => {
-//             const otherVariable =
-//               figma.variables.getVariableById(otherVariableId);
-
-//             if (otherVariable && modeValue && typeof modeValue === "object") {
-//               // Check if the value references the name of another variable
-//               if (
-//                 variable.name !== otherVariable.name && // Avoid self-reference
-//                 (modeValue as VariableAlias).id === otherVariable.id
-//               ) {
-//                 handleVariableAlias(variable, modeValue, mode);
-//               }
-//             }
-//           });
-//         }
-//       });
-//     });
-//   });
-//   return variableCollections;
-// };
-
 const detectVariableReferencesInCollection = (collection, variable) => {
   let tmpVariable = {};
   collection?.modes?.forEach((mode) => {
@@ -110,9 +71,13 @@ const detectVariableReferencesInCollection = (collection, variable) => {
             variable.name !== otherVariable.name && // Avoid self-reference
             modeValue.id === otherVariable.id
           ) {
-            tmpVariable = handleVariableAlias(variable, modeValue, mode);
-            // @ts-ignore
-            tmpVariable = deepMerge(tmpVariable, { aliasSameMode: true });
+            const aliasSameMode = true;
+            tmpVariable = handleVariableAlias(
+              variable,
+              modeValue,
+              mode,
+              aliasSameMode
+            );
           }
         }
       });
@@ -180,14 +145,20 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
       });
     });
 
-  const tmpVariables = variables
-    .flat()
-    // @ts-ignore
-    .map((v) => (v.aliasSameMode ? processAliasModes([v]) : v));
-
-  console.log("tmpVariables", tmpVariables.flat());
+  // add the mode name to the variable values value in order
+  // to be able to reference to it correctly:
+  // values: collection.value becomes collection.[mode name].value
+  //
+  // `variablesWithAliasInTheSameMode` is not used when `settings.modeInTokenValue`
+  // is set to `true` to avoid values in the form of: collection.[mode name].[mode name].value
+  const variablesWithAliasInTheSameMode = () =>
+    variables
+      .flat()
+      //@ts-ignore
+      .map((v) => (v.aliasSameMode ? processAliasModes([v]) : v))
+      .flat();
 
   return settings.modeInTokenValue
     ? processAliasModes(variables.flat())
-    : tmpVariables.flat();
+    : variablesWithAliasInTheSameMode();
 };
