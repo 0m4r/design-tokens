@@ -56,7 +56,7 @@ const extractVariable = (
 const detectVariableReferencesInCollection = (collection, variable) => {
   let tmpVariable = {};
   collection?.modes?.forEach((mode) => {
-    console.log(`Inspecting variables in mode: ${mode.name}, ${mode.modeId}`);
+    // console.log(`Inspecting variables in mode: ${mode.name}, ${mode.modeId}`);
 
     if (variable) {
       const modeValue = variable.valuesByMode[mode.modeId] as VariableAlias;
