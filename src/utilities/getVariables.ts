@@ -113,10 +113,12 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
       const { variableCollectionId } = variable;
       const { name: collection, modes } = collections[variableCollectionId];
 
-      variable = detectVariableReferencesInCollection(
-        collections[variableCollectionId],
-        variable
-      );
+      if(modes.length > 1) {
+        variable = detectVariableReferencesInCollection(
+          collections[variableCollectionId],
+          variable
+        );
+      }
 
       // return each mode value as a separate variable
       return Object.entries(variable.valuesByMode).map(([id, value]) => {
@@ -149,9 +151,9 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
   // to be able to reference to it correctly:
   // values: collection.value becomes collection.[mode name].value
   //
-  // `variablesWithAliasInTheSameMode` is not used when `settings.modeInTokenValue`
+  // `variablesWithAliasInTheSameCollection` is not used when `settings.modeInTokenValue`
   // is set to `true` to avoid values in the form of: collection.[mode name].[mode name].value
-  const variablesWithAliasInTheSameMode = () =>
+  const variablesWithAliasInTheSameCollection = () =>
     variables
       .flat()
       //@ts-ignore
@@ -160,5 +162,5 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
 
   return settings.modeInTokenValue
     ? processAliasModes(variables.flat())
-    : variablesWithAliasInTheSameMode();
+    : variablesWithAliasInTheSameCollection();
 };

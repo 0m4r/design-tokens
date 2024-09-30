@@ -10,11 +10,6 @@ const processAliasModes = (variables) => {
     // alias mode singular because only one is shown
     const { aliasMode, aliasCollectionName } = variable;
 
-    // this was only added for this function to process that data so before we return the variables, we can remove it
-    // delete variable.aliasMode;
-    // delete variable.aliasCollectionName;
-    // delete variable.aliasSameMode;
-
     collector.push({
       ...variable,
       values: variable.values.replace(
