@@ -22,6 +22,7 @@
     "lint": "standardx src/**/*.ts src/*.ts | snazzy",
     "lint:fix": "standardx --fix src/**/*.ts src/*.ts | snazzy",
     "examples": "rm -rf ./examples/build && node ./examples/build.js",
+    "examples:w3c": "rm -rf ./examples/build/w3c && node ./examples/build-w3c.js",
     "set-version": "replace-in-files --regex='\\d+\\.\\d+\\.\\d+' --replacement=$npm_package_version src/utilities/version.ts",
     "version": "npm run set-version && npm run build && git add --all"
   },
@@ -30,13 +31,14 @@
   "devDependencies": {
     "@ctrl/tinycolor": "^3.4.0",
     "@emotion/css": "^11.1.3",
-    "@figma/eslint-plugin-figma-plugins": "^0.15.0",
-    "@figma/plugin-typings": "^1.106.0",
+    "@figma/eslint-plugin-figma-plugins": "^0.16.1",
+    "@figma/plugin-typings": "^1.119.0",
     "@types/jest": "^28.1.1",
     "@types/react": "^18.0.13",
     "@types/react-dom": "^18.0.5",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "bundlesize": "^0.18.2",
     "change-case": "^4.1.2",
     "css-loader": "^6.7.1",
     "deepmerge": "^4.2.2",
@@ -67,6 +69,7 @@
     "url-loader": "^4.1.1",
     "use-immer": "^0.7.0",
     "webpack": "^5.73.0",
+    "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^4.10.0"
   },
   "standardx": {

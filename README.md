@@ -1,12 +1,10 @@
-> [!WARNING]
-> **This plugin is only partially supported!**  
+> [!WARNING] > **This plugin is only partially supported!**  
 > This means: I don't have capacity to add any features or really improve stuff. Bugfixes may be added if time allows.
 > I am also happy to discuss and merge PRs.
-> 
-> I personally have changed my opinion a long time ago to favor the source fo truth for design tokens to be in a json file. Figma should be a consumer so you only import tokens into figma. This is why I don't use plugins like this one anymore in my work. 
-> 
+>
+> I personally have changed my opinion a long time ago to favor the source fo truth for design tokens to be in a json file. Figma should be a consumer so you only import tokens into figma. This is why I don't use plugins like this one anymore in my work.
+>
 > → [Read more about the a better setup](https://medium.com/user-experience-design-1/the-ultimate-design-token-setup-cdf50dc841c8#:~:text=you%20are%20making.-,Source%20of%20truth,-There%20is%20some)
-
 
 ![Design Tokens plugin for figma](https://github.com/lukasoppermann/design-tokens/blob/main/_resources/Design%20Tokens%20Plugin%20Cover.png)
 
@@ -17,6 +15,8 @@
 [![Test status](https://github.com/lukasoppermann/design-tokens/workflows/Testing%20and%20linting/badge.svg)](https://github.com/lukasoppermann/design-tokens/actions?query=workflow%3A%22Testing+and+linting%22) [![Coverage Status](https://coveralls.io/repos/github/lukasoppermann/design-tokens/badge.svg?branch=main)](https://coveralls.io/github/lukasoppermann/design-tokens?branch=main)
 
 The **Design Tokens** plugin for Figma allows you to export design tokens into a json format that can be used with the [Amazon style dictionary](https://amzn.github.io/style-dictionary/#/) package. This allows you to transform your tokens to different languages / platforms like web, iOS or Android.
+
+**✨ Now with full W3C Design Token Community Group (DTCG) specification support!** Export tokens that comply with the official [W3C Design Token standard](https://design-tokens.github.io/community-group/format/) including proper `$` prefixes, structured color values, and standardized token formats.
 
 ## Table of content
 
@@ -37,7 +37,7 @@ The **Design Tokens** plugin for Figma allows you to export design tokens into a
     - [Opacity token](#opacity)
   - [Available properties](#available-properties)
 - [Settings](#settings)
-  - [File Export Settings](#file-export-settings)  
+  - [File Export Settings](#file-export-settings)
   - [Push tokens to Github / Server](#push-to-server)
 - [Contribution](#contribution)
 
@@ -111,18 +111,18 @@ When using the `Standard` format composite tokens are created, for example the p
 However for `Text Styles` the `Standard` format has a special `typography` type that if enabled exports the individual tokens as well. This may result in the following tokens (show as transformed css custom properties for readability).
 
 ```css
-  --font-headline-3-font-size: 20;
-  --font-headline-3-text-decoration: none;
-  --font-headline-3-font-family: Roboto;
-  --font-headline-3-font-style: italic;
-  --font-headline-3-font-weight: 500;
-  --font-headline-3-font-stretch: condensed;
-  --font-headline-3-font-style-old: Medium Italic Condensed; /* only to preserve original value */
-  --font-headline-3-letter-spacing: 2;
-  --font-headline-3-line-height: 160;
-  --font-headline-3-paragraph-indent: 5;
-  --font-headline-3-paragraph-spacing: 8;
-  --font-headline-3-text-case: uppercase;
+--font-headline-3-font-size: 20;
+--font-headline-3-text-decoration: none;
+--font-headline-3-font-family: Roboto;
+--font-headline-3-font-style: italic;
+--font-headline-3-font-weight: 500;
+--font-headline-3-font-stretch: condensed;
+--font-headline-3-font-style-old: Medium Italic Condensed; /* only to preserve original value */
+--font-headline-3-letter-spacing: 2;
+--font-headline-3-line-height: 160;
+--font-headline-3-paragraph-indent: 5;
+--font-headline-3-paragraph-spacing: 8;
+--font-headline-3-text-case: uppercase;
 ```
 
 #### Naming
@@ -163,7 +163,7 @@ The plugin also supports custom tokens for `borders`, `radii`, `sizes`, `spacing
 
 #### Sizes
 
-To create a *sizes token*, do the following:
+To create a _sizes token_, do the following:
 
 1. Create a `Frame` and name it `_tokens/sizes`
 2. Create another `Main Component` and set the width property to your `8`.
@@ -172,7 +172,7 @@ To create a *sizes token*, do the following:
 The token will be exported, if you convert it to css the output would be something like this:
 
 ```css
-  --sizes-8: 8;
+--sizes-8: 8;
 ```
 
 ![Example size tokens](https://github.com/lukasoppermann/design-tokens/raw/main/_resources/example-sizes-tokens.png)
@@ -180,7 +180,7 @@ The token will be exported, if you convert it to css the output would be somethi
 
 #### Spacing
 
-To create a *spacing token*, do the following:
+To create a _spacing token_, do the following:
 
 1. Create a `Frame` and name it `_tokens/spacing`
 2. Create another `Main Component` and set the padding properties to `10` in the `auto layout`.
@@ -189,10 +189,10 @@ To create a *spacing token*, do the following:
 The token will be exported, if you convert it to css the output would be something like this:
 
 ```css
-  --spacing-10-top: 10;
-  --spacing-10-right: 10;
-  --spacing-10-bottom: 10;
-  --spacing-10-left: 10;
+--spacing-10-top: 10;
+--spacing-10-right: 10;
+--spacing-10-bottom: 10;
+--spacing-10-left: 10;
 ```
 
 ![Example spacing tokens](https://github.com/lukasoppermann/design-tokens/raw/main/_resources/example-spacing-tokens.png)
@@ -200,7 +200,7 @@ The token will be exported, if you convert it to css the output would be somethi
 
 #### Breakpoints
 
-To create a *breakpoint token*, do the following:
+To create a _breakpoint token_, do the following:
 
 1. Create a `Frame` and name it `_tokens/breakpoints`
 2. Create another `Main Component` and set the width property to your desired values (example for `lg` -> `1280` ).
@@ -209,14 +209,14 @@ To create a *breakpoint token*, do the following:
 The token will be exported, if you convert it to css the output would be something like this:
 
 ```css
-  --breakpoints-lg: 1280;
+--breakpoints-lg: 1280;
 ```
 
 ![Example breakpoints tokens](https://github.com/lukasoppermann/design-tokens/raw/main/_resources/example-breakpoints-tokens.png)
 
 #### Borders
 
-To create a *border token*, do the following:
+To create a _border token_, do the following:
 
 1. Create a `Frame` and name it `_tokens/borders`
 2. Create another `Main Component` and set the stroke property to your desired values.
@@ -225,18 +225,18 @@ To create a *border token*, do the following:
 The token will be exported, if you convert it to css the output would be something like this:
 
 ```css
-  --borders-dashed-outside-stroke-align: outside;
-  --borders-dashed-outside-dash-pattern: 5,5,3,3;
-  --borders-dashed-outside-stroke-cap: none;
-  --borders-dashed-outside-stroke-join: miter;
-  --borders-dashed-outside-stroke-miter-limit: 4;
-  --borders-dashed-outside-stroke-weight: 1;
-  --borders-dashed-outside-stroke: rgba(64, 255, 186, 1);
+--borders-dashed-outside-stroke-align: outside;
+--borders-dashed-outside-dash-pattern: 5, 5, 3, 3;
+--borders-dashed-outside-stroke-cap: none;
+--borders-dashed-outside-stroke-join: miter;
+--borders-dashed-outside-stroke-miter-limit: 4;
+--borders-dashed-outside-stroke-weight: 1;
+--borders-dashed-outside-stroke: rgba(64, 255, 186, 1);
 ```
 
 #### Radii
 
-To create a *radius token*, do the following:
+To create a _radius token_, do the following:
 
 1. Create a `Frame` and name it `_tokens/radii`
 2. Create another `Main Component` and set the radius properties to your desired values.
@@ -245,13 +245,13 @@ To create a *radius token*, do the following:
 The token will be exported, if you convert it to css the output would be something like this:
 
 ```css
-  --radii-same-with-smoothing-radius: 5;
-  --radii-same-with-smoothing-radius-type: single;
-  --radii-same-with-smoothing-radii-top-left: 5;
-  --radii-same-with-smoothing-radii-top-right: 5;
-  --radii-same-with-smoothing-radii-bottom-right: 5;
-  --radii-same-with-smoothing-radii-bottom-left: 5;
-  --radii-same-with-smoothing-smoothing: 0.65;
+--radii-same-with-smoothing-radius: 5;
+--radii-same-with-smoothing-radius-type: single;
+--radii-same-with-smoothing-radii-top-left: 5;
+--radii-same-with-smoothing-radii-top-right: 5;
+--radii-same-with-smoothing-radii-bottom-right: 5;
+--radii-same-with-smoothing-radii-bottom-left: 5;
+--radii-same-with-smoothing-smoothing: 0.65;
 ```
 
 #### Motion
@@ -268,14 +268,14 @@ To create a motion token follow this flow:
 When exporting your tokens you will now get a set of properties for this motion set.
 
 ```css
-  --motion-move-in-type: move_in;
-  --motion-move-in-duration: 0.5;
-  --motion-move-in-easing: ease-in;
-  --motion-move-in-easing-function-x-1: 0.41999998688697815;
-  --motion-move-in-easing-function-x-2: 1;
-  --motion-move-in-easing-function-y-1: 0;
-  --motion-move-in-easing-function-y-2: 1;
-  --motion-move-in-direction: left;
+--motion-move-in-type: move_in;
+--motion-move-in-duration: 0.5;
+--motion-move-in-easing: ease-in;
+--motion-move-in-easing-function-x-1: 0.41999998688697815;
+--motion-move-in-easing-function-x-2: 1;
+--motion-move-in-easing-function-y-1: 0;
+--motion-move-in-easing-function-y-2: 1;
+--motion-move-in-direction: left;
 ```
 
 #### Opacity
@@ -313,16 +313,24 @@ This option allows you to define how the token names will be converted when they
 
 - `Default` – spaces from the beginning and end are removed and the name is converted to lowercase
 - `camelCase` - spaces from the beginning and end are removed and the name is converted to [camelCase](https://en.wikipedia.org/wiki/Camel_case)
-- `kebab-case`  - spaces from the beginning and end are removed and the name is converted to kebab-case
+- `kebab-case` - spaces from the beginning and end are removed and the name is converted to kebab-case
 
 ### Token format
 
 This option defines the structure for the json output.
 
-#### Standard (W3C draft)
+#### Standard (W3C DTCG Specification)
 
-This format is based on the current spec draft of the [Design Tokens W3C Community Group](https://github.com/design-tokens/community-group).
-It is much simpler and makes it easier to define custom transformers for amazon style dictionary.
+This format is based on the [W3C Design Token Community Group (DTCG) specification](https://design-tokens.github.io/community-group/format/) and includes full support for the W3C Design Token standard format.
+
+**✨ New: W3C Compliant Export** - The plugin now includes a W3C compliant transformer that exports tokens using proper `$` prefixes for reserved properties (`$type`, `$value`, `$description`, `$extensions`) and follows the official W3C specification structure:
+
+- **Color tokens**: Use `colorSpace: 'srgb'` with `components` array format for precise color values
+- **Dimension tokens**: Structure values as `{ value: number, unit: string }` objects
+- **Extensions**: Preserve Figma-specific data under the `$extensions` property using reverse domain notation
+- **Compliance**: Full adherence to W3C DTCG reserved property naming and value structures
+
+This format is much simpler and makes it easier to define custom transformers for amazon style dictionary.
 
 Every token follows this structure ([learn more](https://github.com/lukasoppermann/design-tokens/blob/main/types/standardToken.d.ts)):
 
@@ -332,8 +340,8 @@ type StandardTokenInterface = {
   description?: string,
   value: StandardTokenValueType | StandardCompositeTokenValueType,
   type: StandardTokenTypes,
-  extensions?: StandardTokenExtensionsInterface
-}
+  extensions?: StandardTokenExtensionsInterface,
+};
 ```
 
 #### Original (deprecated)
@@ -357,7 +365,7 @@ You can configure whether to include these mode names in the output JSON or not.
 By default, the mode names are not included in both the token names and the token values. You can turn on this behavior in the plug-in settings:
 
 - If you wish to include the mode name in the token names, but not in the token values, you can activate the "Add mode to token value".
-- If you wish to include the mode name  in the token values, but not in the token names, you can activate the "Add mode to token name".
+- If you wish to include the mode name in the token values, but not in the token names, you can activate the "Add mode to token name".
 - If you wish to do include the mode name in both the token name and value, you can activate both of the checkboxes.
 - If you wish to do not include the mode name in both the token name and value, you can deactivate both of the checkboxes.
 
@@ -397,19 +405,19 @@ When enabled this option keeps the token prefix in the name, e.g. for `color/red
 
 **For styles:** Styles do not have a prefix so when enabled the plugin will add the prefix to the token name.
 
-- *Color style:* `red` -> `color/red`
-- *Gradient style:* `black to white` -> `gradient/black to white`
-- *Font style:* `h1` -> `font/h1`
-- *Grid style:* `mobile` -> `grid/mobile`
-- *Color style:* `shadow 4dp` -> `effect/shadow 4dp`
+- _Color style:_ `red` -> `color/red`
+- _Gradient style:_ `black to white` -> `gradient/black to white`
+- _Font style:_ `h1` -> `font/h1`
+- _Grid style:_ `mobile` -> `grid/mobile`
+- _Color style:_ `shadow 4dp` -> `effect/shadow 4dp`
 
 **For custom tokens:** Custom tokens use the prefix to identify the token e.g. `radius/5px`, the prefix `radius` is used by the plugin to identify the token type. This means the name already includes the prefix and nothing will be added. However it this option is disabled the prefix will be removed.
 
-layer name | option enabled | option disabled
----|---|---
-`radius/5px` | `radius/5px` | `5px`
-`size/8px` | `size/8px` | `8px`
-`breakpoint/md` | `breakpoint/md` | `md`
+| layer name      | option enabled  | option disabled |
+| --------------- | --------------- | --------------- |
+| `radius/5px`    | `radius/5px`    | `5px`           |
+| `size/8px`      | `size/8px`      | `8px`           |
+| `breakpoint/md` | `breakpoint/md` | `md`            |
 
 #### Token prefixes names
 
@@ -449,7 +457,7 @@ The body of the request will look like the following:
 
 ```ts
   "event_type": "update-tokens", // or any string you defined
-  "client_payload": { 
+  "client_payload": {
     "tokens": "{...}", // the stringified json object holding all your design tokens
     "filename": "Design Tokens", // the Figma file name from which the tokens were exported
     "commitMessage": "Your commit message"
@@ -527,7 +535,7 @@ Once the pipeline is triggered the following values will be available as environ
 > and Designers should be aware of this limitation and plan accordingly. The below warning is an indication you have
 > exceeded the data limit:
 >
->```
+> ```
 > ERROR: Error cleaning up configmap: resource name may not be empty
 > ERROR: Job failed (system failure): prepare environment: setting up scripts configMap: generating scripts config map: ConfigMap "[[redacted image name]]" is invalid: []: Too long: must have at most 1048576 bytes. Check https://docs.gitlab.com/runner/shells/index.html#shell-profile-loading for more information
 > ```

@@ -100,8 +100,8 @@ export const getVariables = async (figma: PluginAPI, settings: Settings) => {
   // get collections
   const collections = localVariableCollections
     ? Object.fromEntries(
-      localVariableCollections?.map((collection) => [collection.id, collection])
-    )
+        localVariableCollections?.map((collection) => [collection.id, collection])
+      )
     : []
   // get variables
   const variables = await Promise.all(localVariables?.filter((variable) =>
