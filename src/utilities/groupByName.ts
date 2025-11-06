@@ -20,7 +20,7 @@ export const groupByKeyAndName = (tokenArray: OriginalFormatTokenInterface[] | S
     // split token name into array
     // remove leading and following whitespace for every item
     // transform items to lowerCase
-    const groupsFromName = token.name.split('/').map(group => transformName(group, userSettings.nameConversion))
+    const groupsFromName = token?.name?.split?.('/').map(group => transformName(group, userSettings.nameConversion))
     // remove name if not otherwise specified
     if (removeName === true) {
       delete token.name

@@ -2,6 +2,7 @@ import { internalTokenInterface } from '@typings/propertyObject'
 import { Settings } from '@typings/settings'
 import { transformer as originalFormatTransformer } from '@src/transformer/originalFormatTransformer'
 import { transformer as standardTransformer } from '@src/transformer/standardTransformer'
+import { w3cCompliantTransformer } from '@src/transformer/w3cCompliantTransformer'
 import { groupByKeyAndName } from '@utils/groupByName'
 import { tokenTypes } from '@config/tokenTypes'
 import { tokenCategoryType } from '@typings/tokenCategory'
@@ -12,11 +13,12 @@ import { prefixTokenName } from '@utils/prefixTokenName'
 const tokenTransformer = {
   original: originalFormatTransformer,
   standard: standardTransformer,
-  standardDeprecated: standardTransformer
+  standardDeprecated: standardTransformer,
+  w3c: w3cCompliantTransformer
 }
 
 const createTypographyTokens = (tokens: internalTokenInterface[], settings) => {
-  if (settings.tokenFormat === 'standard') {
+  if (settings.tokenFormat === 'standard' || settings.tokenFormat === 'w3c') {
     return JSON.parse(JSON.stringify(tokens.filter(item => item.category === tokenTypes.font.key)))
       .map(item => {
         item.name = 'typography/' + item.name.substr(item.name.indexOf('/') + 1).trim().trimStart()

@@ -27,6 +27,7 @@ describe('w3cCompliantTransformer', () => {
             const result = w3cCompliantTransformer(colorToken, mockSettings)
 
             expect(result).toEqual({
+                name: 'primary',
                 $description: 'Primary brand color',
                 $type: 'color',
                 $value: {
@@ -63,6 +64,7 @@ describe('w3cCompliantTransformer', () => {
             const result = w3cCompliantTransformer(sizeToken, mockSettings)
 
             expect(result).toEqual({
+                name: 'medium',
                 $type: 'dimension',
                 $value: { value: 16, unit: 'px' },
                 $extensions: {
@@ -78,7 +80,7 @@ describe('w3cCompliantTransformer', () => {
         it('should handle unsupported token types with fallback', () => {
             const unsupportedToken: internalTokenInterface = {
                 name: 'test',
-                category: 'string',
+                category: 'string' as any, // This is not a real token category
                 exportKey: 'variables',
                 values: { value: 'test' },
                 extensions: {
@@ -91,8 +93,9 @@ describe('w3cCompliantTransformer', () => {
             const result = w3cCompliantTransformer(unsupportedToken, mockSettings)
 
             expect(result).toEqual({
+                name: 'test',
                 $type: 'string',
-                $value: 'Not implemented yet',
+                $value: { value: 'test' }, // Now returns the actual values instead of "Not implemented yet"
                 $extensions: {
                     'org.lukasoppermann.figmaDesignTokens': {
                         exportKey: 'styles'
@@ -177,6 +180,45 @@ describe('w3cCompliantTransformer', () => {
             expect(result.$value).toEqual({
                 value: 32,
                 unit: 'px'
+            })
+        })
+
+        it('should handle typography tokens with object-structured font properties', () => {
+            const typographyToken: internalTokenInterface = {
+                name: 'heading',
+                category: 'font',
+                exportKey: 'font',
+                values: {
+                    fontSize: { value: 24 },
+                    fontWeight: 600,
+                    fontFamily: 'Inter',
+                    letterSpacing: { value: 0.5 },
+                    lineHeight: { value: 32 }
+                },
+                extensions: {
+                    'org.lukasoppermann.figmaDesignTokens': {
+                        exportKey: 'styles'
+                    }
+                }
+            }
+
+            const result = w3cCompliantTransformer(typographyToken, mockSettings)
+
+            expect(result).toEqual({
+                name: 'heading',
+                $type: 'typography',
+                $value: {
+                    fontFamily: 'Inter',
+                    fontSize: { value: 24, unit: 'px' },
+                    fontWeight: 600,
+                    letterSpacing: { value: 0.5, unit: 'px' },
+                    lineHeight: 1.333 // 32 / 24 = 1.333...
+                },
+                $extensions: {
+                    'org.lukasoppermann.figmaDesignTokens': {
+                        exportKey: 'styles'
+                    }
+                }
             })
         })
     })

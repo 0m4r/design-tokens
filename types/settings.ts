@@ -5,7 +5,8 @@ export type nameConversionType =
 
 export type tokenFormatType =
   'standard' |
-  'original'
+  'original' |
+  'w3c'
 
 export type Settings = {
   filename: string,

@@ -3,11 +3,13 @@ import { internalTokenInterface } from '@typings/propertyObject'
 import { Settings, tokenFormatType } from '@typings/settings'
 import { transformer as originalFormatTransformer } from '@src/transformer/originalFormatTransformer'
 import { transformer as standardTransformer } from '@src/transformer/standardTransformer'
+import { w3cCompliantTransformer } from '@src/transformer/w3cCompliantTransformer'
 import { groupByKeyAndName } from '@utils/groupByName'
 import { prefixTokenName } from '@utils/prefixTokenName'
 
 jest.mock('@src/transformer/originalFormatTransformer')
 jest.mock('@src/transformer/standardTransformer')
+jest.mock('@src/transformer/w3cCompliantTransformer')
 jest.mock('@utils/groupByName')
 jest.mock('@utils/prefixTokenName')
 
@@ -71,12 +73,14 @@ describe('prepareExport', () => {
   beforeEach(() => {
     (originalFormatTransformer as jest.Mock).mockImplementation(token => token)
       (standardTransformer as jest.Mock).mockImplementation(token => token)
+      (w3cCompliantTransformer as jest.Mock).mockImplementation(token => token)
       (groupByKeyAndName as jest.Mock).mockImplementation(tokens => tokens)
       (prefixTokenName as jest.Mock).mockImplementation(tokens => tokens)
   })
 
   afterEach(() => {
     jest.clearAllMocks()
+    jest.resetAllMocks()
   })
 
   it('should return grouped tokens', () => {
@@ -120,5 +124,30 @@ describe('prepareExport', () => {
     ]
     const result = prepareExport(JSON.stringify(tokens), settings)
     expect(result.some(token => token.category === 'typography')).toBe(false)
+  })
+
+  it('should create typography tokens if format is w3c', () => {
+    const settings = { ...mockSettings, tokenFormat: 'w3c' as tokenFormatType }
+    const tokens = [
+      { name: 'font/primary', category: 'font', exportKey: 'font', extensions: {} } as internalTokenInterface
+    ]
+    const result = prepareExport(JSON.stringify(tokens), settings)
+    expect(result.some(token => token.category === 'font')).toBe(true)
+  })
+
+  it('should use w3c transformer when format is w3c', () => {
+    const settings = {
+      ...mockSettings,
+      tokenFormat: 'w3c' as tokenFormatType
+    }
+    const tokens = [
+      { name: 'color/primary', category: 'color', exportKey: 'color', extensions: {} } as internalTokenInterface
+    ]
+
+    const result = prepareExport(JSON.stringify(tokens), settings)
+
+    // Simply verify that the function completes successfully with W3C format
+    expect(result).toBeDefined()
+    expect(w3cCompliantTransformer).toHaveBeenCalled()
   })
 })

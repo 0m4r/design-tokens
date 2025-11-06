@@ -68,7 +68,7 @@ export type W3CTokenDataInterface = {
 }
 
 export type W3CTokenInterface = {
-  name?: string
+  name: string // Required for grouping, similar to StandardTokenInterface
 } & W3CTokenDataInterface
 
 export type W3CTokenGroup = {
