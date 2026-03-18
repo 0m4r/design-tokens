@@ -110,17 +110,18 @@ describe('getVariables', () => {
     expect(result[0].name).toContain('collection1/variable1')
   })
 
-  it('should handle variable alias references within the same collection', async () => {
+  it('should mark same-collection alias references with aliasSameMode before extraction', async () => {
     const mockCollections = [
       {
         id: '1',
         name: 'collection1',
         modes: [{ modeId: 'mode1', name: 'Mode 1' }],
-        variableIds: ['1']
+        variableIds: ['aliasId']
       }
     ]
     const mockVariables = [
       {
+        id: 'variable1-id',
         variableCollectionId: '1',
         name: 'variable1',
         valuesByMode: { mode1: { type: 'VARIABLE_ALIAS', id: 'aliasId' } }
@@ -129,17 +130,28 @@ describe('getVariables', () => {
 
     mockFigma.variables.getLocalVariableCollectionsAsync = jest.fn().mockResolvedValue(mockCollections)
     mockFigma.variables.getLocalVariablesAsync = jest.fn().mockResolvedValue(mockVariables)
+    mockFigma.variables.getVariableByIdAsync = jest.fn().mockResolvedValue({
+      id: 'aliasId',
+      variableCollectionId: '1',
+      name: 'variable2'
+    })
     ;(handleVariableAlias.default as jest.Mock).mockResolvedValue({
       exportKey: 'variables',
       category: 'string',
       values: '{collection1.alias}'
     })
 
-    mockSettings.resolveSameCollectionOrModeReference = true
+    const result = await getVariables(mockFigma, {
+      ...mockSettings,
+      resolveSameCollectionOrModeReference: true
+    })
 
-    const result = await getVariables(mockFigma, mockSettings)
     expect(result).toHaveLength(1)
-    expect(result[0].name).toContain('collection1/variable1')
+    expect(handleVariableAlias.default).toHaveBeenCalledWith(
+      expect.objectContaining({ aliasSameMode: true, name: 'variable1' }),
+      { type: 'VARIABLE_ALIAS', id: 'aliasId' },
+      { modeId: 'mode1', name: 'Mode 1' }
+    )
   })
 
   it('should add the alias mode to same-collection references when experimental resolution is enabled', async () => {
