@@ -12,7 +12,7 @@ import deepMerge from '@utils/deepMerge'
 
 const extractVariable = async (
   variable: Variable & { aliasSameMode?: boolean },
-  value: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+  value: any,
   mode: { modeId: string; name: string }
 ) => {
   let category: tokenCategoryType = 'color'
