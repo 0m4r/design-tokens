@@ -68,4 +68,23 @@ describe('handleVariableAlias', () => {
       aliasSameMode: false
     })
   })
+
+  it('should return null when the alias collection cannot be resolved', async () => {
+    const variable = { name: 'test variable', description: 'test description' } as any
+    const value = { id: 'test id' }
+    const resolvedAlias = {
+      variableCollectionId: 'missing collection id',
+      name: 'test name',
+      valuesByMode: { mode1: 'value1' }
+    }
+
+    // @ts-ignore
+    global.figma.variables.getVariableByIdAsync.mockReturnValue(resolvedAlias)
+    // @ts-ignore
+    global.figma.variables.getVariableCollectionByIdAsync.mockReturnValue(null)
+
+    const result = await handleVariableAlias(variable, value, { modeId: 'passedInModeId', name: 'passedInMode' })
+
+    expect(result).toBeNull()
+  })
 })

@@ -140,6 +140,9 @@ export const getVariables = async (figma: PluginAPI, settings: Settings) => {
       const variableName = `${collection}/${variable.name}`
       const variableNameWithMode = mode ? `${collection}/${mode?.name}/${variable?.name}` : variableName
       const extractedVariable = await extractVariable(variable, value, mode)
+      if (!extractedVariable) {
+        return null
+      }
 
       return {
         ...extractedVariable,
@@ -160,6 +163,8 @@ export const getVariables = async (figma: PluginAPI, settings: Settings) => {
     }))
   }) || [])
 
+  const flattenedVariables = variables.flat().filter(Boolean)
+
   // add the mode name to the variable values value in order
   // to be able to reference to it correctly:
   // values: collection.value becomes collection.[mode name].value
@@ -167,13 +172,12 @@ export const getVariables = async (figma: PluginAPI, settings: Settings) => {
   // `variablesWithAliasInTheSameCollection` is not used when `settings.modeInTokenValue`
   // is set to `true` to avoid values in the form of: collection.[mode name].[mode name].value
   const variablesWithAliasInTheSameCollection = () =>
-    variables
-      .flat()
+    flattenedVariables
       // @ts-ignore
       .map((v) => (v?.aliasSameMode ? processAliasModes([v]) : v))
       .flat()
 
   return settings.modeInTokenValue
-    ? processAliasModes(variables.flat())
+    ? processAliasModes(flattenedVariables)
     : variablesWithAliasInTheSameCollection()
 }

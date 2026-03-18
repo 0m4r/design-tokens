@@ -129,6 +129,11 @@ describe('getVariables', () => {
 
     mockFigma.variables.getLocalVariableCollectionsAsync = jest.fn().mockResolvedValue(mockCollections)
     mockFigma.variables.getLocalVariablesAsync = jest.fn().mockResolvedValue(mockVariables)
+    ;(handleVariableAlias.default as jest.Mock).mockResolvedValue({
+      exportKey: 'variables',
+      category: 'string',
+      values: '{collection1.alias}'
+    })
 
     mockSettings.resolveSameCollectionOrModeReference = true
 
@@ -187,6 +192,31 @@ describe('getVariables', () => {
     expect(result[0].values).toBe('{collection1.mode1.alias}')
   })
 
+  it('should skip alias variables that cannot be resolved', async () => {
+    const mockCollections = [
+      { id: '1', name: 'collection1', modes: [{ modeId: 'mode1', name: 'Mode 1' }] }
+    ]
+    const mockVariables = [
+      {
+        id: 'variable1-id',
+        variableCollectionId: '1',
+        name: 'variable1',
+        valuesByMode: { mode1: { type: 'VARIABLE_ALIAS', id: 'missingAliasId' } }
+      }
+    ]
+
+    mockFigma.variables.getLocalVariableCollectionsAsync = jest.fn().mockResolvedValue(mockCollections)
+    mockFigma.variables.getLocalVariablesAsync = jest.fn().mockResolvedValue(mockVariables)
+    ;(handleVariableAlias.default as jest.Mock).mockResolvedValue(null)
+
+    const result = await getVariables(mockFigma, {
+      ...mockSettings,
+      modeInTokenValue: false
+    })
+
+    expect(result).toEqual([])
+  })
+
   it('should process alias modes if modeInTokenValue is true', async () => {
     const mockCollections = [
       { id: '1', name: 'collection1', modes: [{ modeId: 'mode1', name: 'Mode 1' }] }
@@ -200,6 +230,7 @@ describe('getVariables', () => {
     ];
 
     (mockFigma.variables.getLocalVariableCollectionsAsync as jest.Mock).mockResolvedValue(mockCollections)
+    mockFigma.variables.getLocalVariablesAsync = jest.fn().mockResolvedValue(mockVariables)
 
     mockSettings.modeInTokenValue = true
 
