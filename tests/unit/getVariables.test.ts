@@ -83,6 +83,7 @@ describe('getVariables', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(handleVariableAlias.default as jest.Mock).mockReset()
   })
 
   it('should return an empty array if there are no local variable collections', async () => {
@@ -134,6 +135,56 @@ describe('getVariables', () => {
     const result = await getVariables(mockFigma, mockSettings)
     expect(result).toHaveLength(1)
     expect(result[0].name).toContain('collection1/variable1')
+  })
+
+  it('should add the alias mode to same-collection references when experimental resolution is enabled', async () => {
+    const mockCollections = [
+      {
+        id: '1',
+        name: 'collection1',
+        modes: [{ modeId: 'mode1', name: 'Mode1' }],
+        variableIds: ['aliasId']
+      }
+    ]
+    const mockVariables = [
+      {
+        id: 'variable1-id',
+        variableCollectionId: '1',
+        name: 'variable1',
+        valuesByMode: { mode1: { type: 'VARIABLE_ALIAS', id: 'aliasId' } }
+      }
+    ]
+
+    mockFigma.variables.getLocalVariableCollectionsAsync = jest.fn().mockResolvedValue(mockCollections)
+    mockFigma.variables.getLocalVariablesAsync = jest.fn().mockResolvedValue(mockVariables)
+    mockFigma.variables.getVariableByIdAsync = jest.fn().mockResolvedValue({
+      id: 'aliasId',
+      variableCollectionId: '1',
+      name: 'variable2'
+    })
+    ;(handleVariableAlias.default as jest.Mock).mockImplementation(async (
+      variable,
+      _value,
+      mode,
+      aliasSameMode
+    ) => ({
+      description: variable.description,
+      exportKey: 'variables',
+      category: 'string',
+      values: '{collection1.alias}',
+      aliasCollectionName: 'collection1',
+      aliasMode: mode,
+      aliasSameMode: variable.aliasSameMode || aliasSameMode
+    }))
+
+    const result = await getVariables(mockFigma, {
+      ...mockSettings,
+      modeInTokenValue: false,
+      resolveSameCollectionOrModeReference: true
+    })
+
+    expect(result).toHaveLength(1)
+    expect(result[0].values).toBe('{collection1.mode1.alias}')
   })
 
   it('should process alias modes if modeInTokenValue is true', async () => {
